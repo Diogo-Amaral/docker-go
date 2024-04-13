@@ -1,0 +1,16 @@
+FROM golang:1.22 as build
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY *.go ./
+
+RUN GOOS=linux go build -o /fullcycle
+
+FROM scratch
+
+WORKDIR /
+
+COPY --from=build /fullcycle /fullcycle
+
+ENTRYPOINT ["/fullcycle"]
